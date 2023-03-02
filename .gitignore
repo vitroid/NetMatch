@@ -1,0 +1,5 @@
+*.frag
+*.o
+test.*
+netmatch5a
+*.lock

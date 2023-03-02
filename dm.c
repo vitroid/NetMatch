@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #define MAXD 0x7fffffff
-#define MAXN 10000
+#define MAXN 40000
 #define MAXNEI 40
 /*「アルゴリズムの道具箱」参照*/
 
@@ -90,7 +90,7 @@ void Dijkstra(int *nnei,int *nei,int size,int startNode, int maxPathLen)
   int i;
   int heapcount=0;
   int A[MAXN];
-  
+
   for(i=0;i<size;i++){
     loc[i]=-1;
     if(pathlen[i]<maxPathLen){
@@ -193,7 +193,7 @@ void LoadNGPHasDistanceMatrix(FILE *file,int **nnei,int **nei,int **dm,int *size
     *dm=MakeDistanceMatrix(*size,*nnei,*nei, maxPathLen);
 }
 
-      
+
 
 /*距離行列の要素から、スペクトルを作る。スペクトルは、異なるグラフではほぼ確実に異なるが、運悪く同じスペクトルを持つ場合もありうる。完全な相同性チェックはIsomorph()で行う必要がある。*/
 /*距離10以上はカウントしない。*/
