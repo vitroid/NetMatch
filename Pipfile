@@ -7,8 +7,12 @@ name = "pypi"
 yaplotlib = "*"
 numpy = "*"
 pairlist = "*"
+graphstat = "*"
+jupyter = "*"
+cycless = "*"
 
 [dev-packages]
+ipykernel = "*"
 
 [requires]
 python_version = "3.11"

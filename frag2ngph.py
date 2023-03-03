@@ -4,38 +4,10 @@
 # 引数が与えられた場合は、それをテンプレートとみなし、@NGPH形式の個別のグラフを出力する。
 
 import sys
+from ngph import load, dumps
 
 
-def load_NGPH(file):
-    g = []
-    while True:
-        line=file.readline()
-        if len(line) == 0:
-            break
-        if len(line)>5 and line[:5] == "@NGPH":
-            N = int(file.readline())
-            while True:
-                x,y = [int(x) for x in file.readline().split()]
-                if x < 0:
-                    break
-                g.append([x,y])
-    return g, N
 
-
-def dumps_NGPH(gn):
-    """グラフをNGPH形式で出力
-
-    Args:
-        gn (_type_): tuple of (list of edges, number of nodes)
-        nodes (list, optional): ノードのエイリアス. Defaults to None.
-    """
-    g, n = gn
-    s = "@NGPH\n"
-    s += f"{n}\n"
-    for i,j in g:
-        s += f"{i} {j}\n"
-    s += "-1 -1\n"
-    return s
 
 
 def unique(generator):
@@ -68,8 +40,8 @@ def cast_graph(nodes, template):
 
 if __name__ == "__main__":
     with open(sys.argv[1]) as f:
-        template = load_NGPH(f)
+        template = load(f)
 
     for nodes in unique(lambda: frag_parser(sys.stdin)):
         gn = cast_graph(nodes, template)
-        print(dumps_NGPH(gn), end="")
+        print(dumps(gn), end="")

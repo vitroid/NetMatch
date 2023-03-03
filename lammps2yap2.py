@@ -4,6 +4,14 @@ import sys
 import numpy as np
 import yaplotlib as yap
 from ngph import load
+from graphstat.graphstat_sqlite3 import GraphStat
+import networkx as nx
+from cycless.cycles import cycles_iter
+from logging import getLogger, basicConfig, INFO
+
+# set up logger
+basicConfig(level=INFO)
+logger = getLogger(__name__)
 
 def load_lammps(file):
     natom = 0
@@ -37,15 +45,30 @@ cell = np.diag(np.array(cell))
 # celli = np.linalg.inv(cell)
 atoms = np.array(atoms)
 
-s = ""
-for k, ngph in enumerate(sys.argv[1:]):
-    with open(ngph) as file:
-        s += yap.Layer(k+1)
-        s += yap.Color(k+3)
-        for g, N in load(file):
-            for i,j in g:
-                xi, xj = atoms[i], atoms[j]
-                d = xj - xi
-                d -= np.floor(d+0.5)
-                s += yap.Line(xi@cell, (xi+d)@cell)
+
+gdb = GraphStat("graph.sqlite3", create_if_nonexist=True)
+
+s = yap.RandomPalettes(100, offset=3)
+with open(sys.argv[1]) as file:
+    for g, N in load(file):
+        graph = nx.Graph()
+        for i,j in g:
+            graph.add_edge(i,j)
+        id = gdb.query_id(graph)
+        if id < 0:
+            id = gdb.register()
+        s += yap.Layer(id)
+        s += yap.Color(id+2)
+
+        # 可視化
+        # ノードの表を作る
+        nodes = list(graph)
+        # 重心
+        d = atoms[nodes] - atoms[nodes[0]]
+        d -= np.floor(d+0.5)
+        com = atoms[nodes[0]] + np.mean(d, axis=0)
+        for cycle in cycles_iter(graph, maxsize=8):
+            d = atoms[cycle,:] - com
+            d -= np.floor(d+0.5)
+            s += yap.Polygon((com+d)@cell)
 print(s)

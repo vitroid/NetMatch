@@ -5,3 +5,6 @@ netmatch5a
 *.lock
 @*
 *.pyc
+.yapviewstack
+graph.sqlite3
+polyhed.prof
