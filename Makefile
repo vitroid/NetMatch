@@ -10,8 +10,8 @@ clean:
 	rm netmatch5a *.o
 
 %.ice1c.ngph:  %.ngph ice1c.ngph
-	./netmatch5a ice1c.ngph $<  | ./cookfragment.py ice1c.ngph > $@
+	./netmatch5a ice1c.ngph $<  | ./cookfragment.py | ./frag2ngph.py ice1c.ngph > $@
 %.ice1h2.ngph:  %.ngph ice1h2.ngph
-	./netmatch5a ice1h2.ngph $<  | ./cookfragment.py ice1h2.ngph > $@
+	./netmatch5a ice1h2.ngph $<  | ./cookfragment.py | ./frag2ngph.py ice1h2.ngph > $@
 %.barrelan.ngph:  %.ngph barrelan.ngph
-	./netmatch5a barrelan.ngph $<  | ./cookfragment.py barrelan.ngph > $@
+	./netmatch5a barrelan.ngph $<  | ./cookfragment.py | ./frag2ngph.py barrelan.ngph > $@

@@ -3,3 +3,5 @@
 test.*
 netmatch5a
 *.lock
+@*
+*.pyc
